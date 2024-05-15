@@ -2,13 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
-
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(express.json());
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+const corsConfig = {
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+};
+app.use(cors(corsConfig));
 
 // MongoDB Connection URI
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ubfbj4e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -25,8 +29,8 @@ const client = new MongoClient(uri, {
 async function startServer() {
   try {
     // Connect to MongoDB
-    await client.connect();
-    console.log("Connected to MongoDB");
+    // await client.connect();
+    // console.log("Connected to MongoDB");
 
     // Set up routes after successful connection
     const blogCollection = client.db("blogDB").collection("blog");
